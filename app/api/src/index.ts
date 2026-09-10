@@ -1,15 +1,15 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import express from 'express'
+import authRouter from './routes/auth.js'
 
-const app = new Hono()
+const app = express()
 
-app.get('/health', (c) => {
-  return c.text('Server is running Fine . All Ok.')
+app.use(express.json())
+app.use('/auth', authRouter)
+
+app.get('/health', (_req, res) => {
+  res.send('Server is running Fine . All Ok.')
 })
 
-serve({
-  fetch: app.fetch,
-  port: 3000
-}, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
+app.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000')
 })

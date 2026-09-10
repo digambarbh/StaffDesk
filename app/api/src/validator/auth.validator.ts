@@ -10,7 +10,7 @@ export type signInInput=z.infer<typeof signInValidation>;
 export const createUserValidation=z.object({
     email:z.string().email(),
     password:z.string().min(1,"password is rquuired "),
-    role:z.enum(["admin","manager","employee"])
+    role:z.enum(["admin","manager","employee"]).default("employee")
 })
 
 export type createUserInput=z.infer<typeof createUserValidation>;

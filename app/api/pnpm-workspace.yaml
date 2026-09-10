@@ -1,6 +1,5 @@
 onlyBuiltDependencies:
   - esbuild
 allowBuilds:
+  argon2: true
   esbuild: true
-minimumReleaseAgeExclude:
-  - hono@4.13.7
