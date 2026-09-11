@@ -14,7 +14,7 @@ export const createUserController = async (req: Request, res: Response) => {
     const { email, password, role } = result.data;
     const passwordHash= await hashPassword(password);
     try {
-        const [newUser] = await db
+        const [newUser] = await db // .returning returns a array of rows [{},{}] . [newuser] holds only one object 
             .insert(user)
             .values({
                 email,
