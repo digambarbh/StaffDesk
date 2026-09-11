@@ -1,2 +1,6 @@
 packages:
-  - "apps/*"
+  - "app/*"
+
+allowBuilds:
+  argon2: true
+  esbuild: true
