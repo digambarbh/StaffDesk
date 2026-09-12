@@ -1,5 +1,6 @@
 import { hashPassword } from "better-auth/crypto";
 import type { Request, Response } from "express";
+import argon2 from "argon2";
 import { signInValidation,createUserValidation } from "../validator/auth.validator.js"
 import { user } from "../db/schema/schema.js";
 import { db } from "../db/index.js";
@@ -12,7 +13,7 @@ export const createUserController = async (req: Request, res: Response) => {
         })
     }
     const { email, password, role } = result.data;
-    const passwordHash= await hashPassword(password);
+    const passwordHash= await argon2.hash(password);
     try {
         const [newUser] = await db // .returning returns a array of rows [{},{}] . [newuser] holds only one object 
             .insert(user)
@@ -52,4 +53,43 @@ export const createUserController = async (req: Request, res: Response) => {
             message: "Unable to create user"
         });
     }
+}
+
+
+
+export const loginController=async (req:Request, res:Response)=>{
+    const result=signInValidation.safeParse(req.body);
+
+    if(!result.success){
+        return res.status(400).json({
+            success:false,
+            error:"invalid credentials"
+        })
+    }
+
+    const {email,password}=result.data;
+    const [existingUser]= await db
+        .select()
+        .from(user)
+        .where(eq(user.email,email))
+        .limit(1)
+    
+    if(!existingUser){
+        return res.status(404).json({
+            success:false,
+            error:"user not registerd "
+        })
+    }
+
+
+    const istrue:boolean=await argon2.verify(existingUser.passwordHash,password);
+    if(!istrue){
+        return res.status(401).json({
+            success:false,
+            error:"invalid username or password"
+    })
+}
+
+
+
 }
