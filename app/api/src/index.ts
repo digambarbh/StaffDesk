@@ -1,14 +1,15 @@
 import express from 'express'
 import authRouter from './routes/auth.js'
 import session from 'express-session'
+import { sessionMiddleware } from "./config/sessionConfig.js"
 const app = express()
 
 app.use(express.json())
+app.use(sessionMiddleware);
 
 
 
-
-app.get('/health', (_req, res) => {
+app.get('/health', (req, res) => {
   res.send('Server is running Fine . All Ok.')
 })
 
