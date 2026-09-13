@@ -10,6 +10,6 @@ export const employeeValidator = z.object({
     designation: z.string().max(100).optional(),
     managerId: z.string().uuid().optional(),
     salaryBasic: z.string().regex(/^\d+(\.\d{1,2})?$/).optional(),
-    joiningDate: z.string().date().optional(), status: z.enum(["active", "inactive", "terminated"]).default("active"),
-
+    joiningDate: z.string().date().optional(), 
+    status: z.enum(["active", "inactive", "terminated"]).default("active"),
 })

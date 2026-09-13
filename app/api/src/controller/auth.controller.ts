@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { signInValidation, createUserValidation } from "../validator/auth.validator.js"
 import { user } from "../db/schema/schema.js";
 import { db } from "../db/index.js";
+import session from "express-session";
 export const createUserController = async (req: Request, res: Response) => {
     const result = createUserValidation.safeParse(req.body);
     if (!result.success) {
@@ -128,3 +129,41 @@ export const loginController = async (req: Request, res: Response) => {
 
     })
 }
+
+
+
+export const logoutController=async(req:Request,res:Response)=>{
+    req.session.destroy((error)=>{
+        if(error){
+            res.status(500).json({
+                success:false,
+                error:"unable to logout"
+            })
+        }
+        res.clearCookie("connect.sid");
+        res.status(200).json({
+            success:true,
+            message:"successfully logged out "
+        })
+    })
+}
+
+
+
+export const getSession=async(req:Request,res:Response)=>{
+    if(!req.session.userId){
+        return res.status(401).json({
+            success:false,
+            message:"not Authenticated "
+        })
+    }
+
+    res.status(200).json({
+        success:true,
+            session:{
+                userId:req.session.userId,
+                role:req.session.role
+            }
+    })
+}
+
