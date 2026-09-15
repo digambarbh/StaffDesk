@@ -1,5 +1,6 @@
+import type { NextFunction, Request, Response } from "express"
 
-export const checkAuth=async(req,res,next)=>{
+export const checkAuth=(req: Request, res: Response, next: NextFunction)=>{
     if(!req.session.userId){
         return res.status(401).json({
             success:false,

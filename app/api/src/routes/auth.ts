@@ -8,6 +8,6 @@ authRouter.post("/login",loginController)
 authRouter.post("/session",getSession)
 
 
-authRouter.post("logout",logoutController)
+authRouter.post("/logout",logoutController)
 
 export default authRouter;
